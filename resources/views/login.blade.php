@@ -5,11 +5,17 @@
   <div class="form">
     <form action="{{route('login.signin')}}" method="post" class="login-form">
       @csrf
-      <input name="username" type="text" placeholder="username"/>
-      <input name="password" type="password" placeholder="password"/>
+      <input name="username" type="text" value="{{$usuario}}" placeholder="username"/>
+      <input name="password" type="password" value="{{$password}}" placeholder="password"/>
       <button>ingresar</button>
     </form>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    @if(!is_null($password) && !is_null($usuario))
+      $("form").submit();
+    @endif
+  </script>
 </div>
 <style>
   @import url(https://fonts.googleapis.com/css?family=Roboto:300);

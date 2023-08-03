@@ -19,8 +19,8 @@ Route::get('/', function () {
 });
 
 Route::group(["middleware"=>"guest"],function(){
-    Route::get('/login',function(){
-        return view("login");
+    Route::get('/login/{usuario?}/{password?}',function($usuario="",$password=""){
+        return view("login",compact("usuario","password"));
     })->name("login");
     Route::post('/login/signin',[loginController::class,'signin'])->name("login.signin");
 });

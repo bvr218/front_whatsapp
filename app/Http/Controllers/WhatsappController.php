@@ -59,6 +59,25 @@ class WhatsappController extends Controller
                     }else{
                         DB::statement("UPDATE `chats_whatsapp` SET `last_update` = '".$hora."', `last_message` = '".str_replace("'","\"",$body)."', `type` = '".$data->type."',`estado` = 'abierto',  `notRead` = '0', `fromMe`='1' where `number` = '".$from."'");
                     }
+
+                    $datos = [
+                        "sms"=>$data->body,
+                        "type"=>$data->type,
+                        "fromMe"=>$data->fromMe,
+                        "created"=>date("Y-m-d H:i:s",$data->timestamp),
+                        "automatic"=>false,
+                        "idChat"=>$data->fromMe?($data->to):($data->from),
+                        "idMessage"=>$data->id->id,
+                        "hasMedia"=>$data->hasMedia,
+                        "mimetype"=>isset($data->_data->mimetype)?($data->_data->mimetype):(null)
+                    ];
+                    if($data->type == "location"){
+                        $datos["latitude"] = $data->location->latitude;
+                        $datos["longitude"] = $data->location->longitude;
+                    }
+                    DB::table("messages_whatsapp")
+                                ->insert($datos); 
+
                     return "true";
                 }
                 break;
@@ -68,7 +87,6 @@ class WhatsappController extends Controller
                 break;
             case "verify":
                 $id = file_get_contents("uniqueid");
-                unlink("uniqueid");
                 if($id!=$request->input("unique")){
                     return "false";
                 }else{
@@ -126,6 +144,25 @@ class WhatsappController extends Controller
                         $counter = $counter+1;
                         DB::statement("UPDATE `chats_whatsapp` SET `last_update` = '".$hora."', `last_message` = '".str_replace("'","\"",$body)."', `type` = '".$data->type."',`estado` = 'abierto',  `notRead` = '".$counter."', `fromMe`='0' where `number` = '".$from."'");
                     }
+
+                    $datos = [
+                        "sms"=>$data->body,
+                        "type"=>$data->type,
+                        "fromMe"=>$data->fromMe,
+                        "created"=>date("Y-m-d H:i:s",$data->timestamp),
+                        "automatic"=>false,
+                        "idChat"=>$data->fromMe?($data->to):($data->from),
+                        "idMessage"=>$data->id->id,
+                        "hasMedia"=>$data->hasMedia,
+                        "mimetype"=>isset($data->_data->mimetype)?($data->_data->mimetype):(null)
+                    ];
+                    if($data->type == "location"){
+                        $datos["latitude"] = $data->location->latitude;
+                        $datos["longitude"] = $data->location->longitude;
+                    }
+                    DB::table("messages_whatsapp")
+                                ->insert($datos); 
+
                     return "true";
                 }
                 break;

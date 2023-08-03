@@ -53,40 +53,89 @@ class CRMController extends Controller
     public function whatsappActions(Request $request){
         $unique = uniqid();
         file_put_contents("uniqueid",$unique);
-
         switch ($request->input("action")) {
             case 'getChat':
-                $instancia = DB::table("instancia")
-                                        ->first();
-                $secret = "sk_wh47s1v3"; //no borrar, id para seguridad
-                $url = 'https://api.whatsive.com/aliance/';
-                $data = array(
-                    'secret' => $secret,
-                    'action' => 'getChat',
-                    'id' => $request->input("id"),
-                    'limit' => $request->input("limit"),
-                    'idVerification'=>$unique,
-                    'addr'=>$instancia->addr,
-                    'port'=>$instancia->port
-                );
 
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                
-                $response = curl_exec($ch);
-                $response = json_decode($response);
-                if($response->salida != "success"){
-                    return json_encode(["salida"=>"error","message"=>$response->message]);
+                $sms = DB::table("messages_whatsapp")
+                                ->where("idChat","=",$request->input("id"))
+                                ->get();
+                if(count($sms)>0){
+                    $mensajes = [];
+                    foreach ($sms as $message) {
+                        $mess = [
+                            "fromMe"=>$message->fromMe,
+                            "hasMedia"=>$message->hasMedia,
+                            "type"=>$message->type,
+                            "id"=>[
+                                "id"=>$message->idMessage
+                            ],
+                            "_data"=>[
+                                "mimetype"=>$message->mimetype
+                            ],
+                            "body"=>$message->sms,
+                            "timestamp"=>strtotime($message->created)
+                        ];
+                        if($message->type == "location"){
+                            $mess["location"] = [
+                                "latitude"=>$message->latitude,
+                                "longitude"=>$message->longitude
+                            ];
+                        }
+                        $mensajes[]=$mess;
+                    }
+                    return json_encode(["salida"=>"success","messages"=>$mensajes,"other"=>"yes"]);
+                }else{
+                    $instancia = DB::table("instancia")
+                                        ->first();
+                    $secret = "sk_wh47s1v3"; //no borrar, id para seguridad
+                    $url = 'https://api.whatsive.com/aliance/';
+                    $data = array(
+                        'secret' => $secret,
+                        'action' => 'getChat',
+                        'id' => $request->input("id"),
+                        'idVerification'=>$unique,
+                        'addr'=>$instancia->addr,
+                        'port'=>$instancia->port
+                    );
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    
+                    $response = curl_exec($ch);
+                    $response = json_decode($response);
+                    if($response->salida != "success"){
+                        return json_encode(["salida"=>"error","message"=>$response->message]);
+                    }
+                    if (curl_errno($ch)) {
+                        return json_encode(["salida"=>"error","message"=>"No se pudo recuperar el archivo"]);
+                    }
+                    curl_close($ch);
+                    $chats = json_decode($response->chats,true);
+                    foreach ($chats as $chat) {
+                        $datos = [
+                            "sms"=>$chat["body"],
+                            "type"=>$chat["type"],
+                            "fromMe"=>$chat["fromMe"],
+                            "created"=>date("Y-m-d H:i:s",$chat["timestamp"]),
+                            "automatic"=>false,
+                            "idChat"=>$chat["fromMe"]?($chat["to"]):($chat["from"]),
+                            "idMessage"=>$chat["id"]["id"],
+                            "hasMedia"=>$chat["hasMedia"],
+                            "mimetype"=>isset($chat["_data"]["mimetype"])?($chat["_data"]["mimetype"]):(null)
+                        ];
+
+                        DB::table("messages_whatsapp")
+                                        ->insert($datos);       
+                    }
+                    return json_encode(["salida"=>"success","messages"=>$response->chats]);
+        
                 }
-                if (curl_errno($ch)) {
-                    return json_encode(["salida"=>"error","message"=>"No se pudo recuperar el archivo"]);
-                }
-                curl_close($ch);
-                return json_encode(["salida"=>"success","messages"=>$response->chats]);
-                break;
+
+
+                                break;
             case 'closeChat':
                 DB::statement("UPDATE `chats_whatsapp` set `estado`= 'cerrado' where number='".explode("@",$request->input("id"))[0]."'");
                 return "true";
@@ -121,8 +170,9 @@ class CRMController extends Controller
                 
                 $response = curl_exec($ch);
                 $response = json_decode($response);
+
                 if($response->salida != "success"){
-                    return json_encode(["salida"=>"error","message"=>$response->message]);
+                    return json_encode(["salida"=>"error","message"=>"No se pudo encontrar el archivo"]);
                 }
                 if (curl_errno($ch)) {
                     return json_encode(["salida"=>"error","message"=>"No se pudo recuperar el archivo"]);
@@ -153,6 +203,7 @@ class CRMController extends Controller
                 $data = array(
                     'secret' => $secret,
                     'action' => 'sendMessage',
+                    'tecnico' => $request->input("tecnico"),
                     'isFile' => 'false',
                     'message' => $message,
                     'recipient' => $request->input("id"),
@@ -215,6 +266,7 @@ class CRMController extends Controller
                 $data = array(
                     'secret' => $secret,
                     'action' => 'sendMessage',
+                    'tecnico' => $request->input("tecnico"),
                     'isFile' => 'true',
                     'description'=>$d,
                     'mimetype'=>$request->input("mime"),

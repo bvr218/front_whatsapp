@@ -13,21 +13,21 @@
         
         <link rel="shortcut icon" href="{{asset('images/Empresas/Empresa1/favicon.png')}}" />
         <link rel="stylesheet" href="{{asset('gritter/css/jquery.gritter.css')}}"> 
-        <link rel="stylesheet" href="{{asset('vendors/iconfonts/mdi/css/materialdesignicons.min.css')}}">
+        <!-- <link rel="stylesheet" href="{{asset('vendors/iconfonts/mdi/css/materialdesignicons.min.css')}}"> -->
         <link rel="stylesheet" href="{{asset('vendors/css/vendor.bundle.base.css')}}">
         <link rel="stylesheet" href="{{asset('vendors/css/vendor.bundle.addons.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('vendors/DataTables/datatables.min.css')}}"/>
         <link rel="stylesheet" type="text/css" href="{{asset('vendors/bootstrap-selectpicker/css/bootstrap-select.min.css')}}"/>
         <link rel="stylesheet" href="{{asset('vendors/fontawesome/css/all.css')}}" />
-        <link rel="stylesheet" type="text/css" href="{{asset('vendors/flag-icon-css/css/flag-icon.min.css')}}"/>
+        <!-- <link rel="stylesheet" type="text/css" href="{{asset('vendors/flag-icon-css/css/flag-icon.min.css')}}"/> -->
         <link rel="stylesheet" type="text/css" href="{{asset('vendors/sweetalert2/sweetalert2.min.css')}}"/>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-        <link rel="stylesheet" href="{{asset('vendors/bootstrap-datepicker/css/gijgo.min.css')}}">
+        <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins"> -->
+        <!-- <link rel="stylesheet" href="{{asset('vendors/bootstrap-datepicker/css/gijgo.min.css')}}">
         <link rel="stylesheet" href="{{asset('vendors/morris/morris.css')}}">
-        <link rel="stylesheet" href="{{asset('vendors/profile-picture/profile-picture.css')}}">
+        <link rel="stylesheet" href="{{asset('vendors/profile-picture/profile-picture.css')}}"> -->
         <link rel="stylesheet" href="{{asset('vendors/dropify/dropify.css')}}">
         <link rel="stylesheet" href="{{asset('vendors/dropzone/dropzone.css')}}">
-        <link rel="stylesheet" href="{{asset('vendors/light-gallery/css/lightgallery.css')}}">
+        <!-- <link rel="stylesheet" href="{{asset('vendors/light-gallery/css/lightgallery.css')}}"> -->
         <link rel="stylesheet" href="{{asset('vendors/autocomplete/jquery.auto-complete.css')}}">
         <link rel="stylesheet" href="{{asset('css/style.css')}}">
         <link rel="stylesheet" href="{{asset('css/documentacion.css')}}">
@@ -330,35 +330,35 @@
         <!-- Plugin js for this page-->
         <!-- End plugin js for this page-->
         <!-- inject:js -->
-        <script src="{{asset('js/off-canvas.js')}}"></script>
-        <script src="{{asset('js/misc.js')}}"></script>
+        <!-- <script src="{{asset('js/off-canvas.js')}}"></script> -->
+        <!-- <script src="{{asset('js/misc.js')}}"></script> -->
         <script type="text/javascript" src="{{asset('vendors/DataTables/datatables.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/CollapsibleLists.js')}}"></script>
+        <!-- <script type="text/javascript" src="{{asset('js/CollapsibleLists.js')}}"></script> -->
         <script type="text/javascript" src="{{asset('vendors/bootstrap-selectpicker/js/bootstrap-select.min.js')}}"></script>
-        <script src="{{asset('vendors/bootstrap-datepicker/js/gijgo.min.js')}}"></script>
-        <script src="{{asset('vendors/bootstrap-datepicker/js/messages/messages.es-es.min.js')}}"></script>
+        <!-- <script src="{{asset('vendors/bootstrap-datepicker/js/gijgo.min.js')}}"></script> -->
+        <!-- <script src="{{asset('vendors/bootstrap-datepicker/js/messages/messages.es-es.min.js')}}"></script> -->
         <!-- Custom js for this page-->
-        <script type="text/javascript" src="{{asset('vendors/validation/jquery.validate.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('vendors/validation/localization/messages_es.js')}}"></script>
-        <script type="text/javascript" src="{{asset('js/jquery.mask.min.js')}}"></script>
+        <!-- <script type="text/javascript" src="{{asset('vendors/validation/jquery.validate.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('vendors/validation/localization/messages_es.js')}}"></script> -->
+        <!-- <script type="text/javascript" src="{{asset('js/jquery.mask.min.js')}}"></script> -->
         <script type="text/javascript" src="{{asset('vendors/sweetalert2/sweetalert2.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('vendors/morris/morris.min.js')}}"></script>
+        <!-- <script type="text/javascript" src="{{asset('vendors/morris/morris.min.js')}}"></script> -->
         <script type="text/javascript" src="{{asset('vendors/sortable/jquery.sortable.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('vendors/autocomplete/jquery.auto-complete.js')}}"></script>
-        <script type="text/javascript" src="{{asset('vendors/profile-picture/profile-picture.js')}}"></script>
-        <script type="text/javascript" src="{{asset('vendors/dropify/dropify.js')}}"></script>
+        <!-- <script type="text/javascript" src="{{asset('vendors/autocomplete/jquery.auto-complete.js')}}"></script>
+        <script type="text/javascript" src="{{asset('vendors/profile-picture/profile-picture.js')}}"></script> -->
+        <!-- <script type="text/javascript" src="{{asset('vendors/dropify/dropify.js')}}"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-        <script src="{{asset('js/paginicio/planes.js')}}"></script>
+        <!-- <script src="{{asset('js/paginicio/planes.js')}}"></script> -->
         <!-- Dropzone Plugin Js -->
         <script src="{{asset('vendors/dropzone/dropzone.js')}}"></script>
         <!-- Light Gallery Plugin Js -->
         <script src="{{asset('vendors/light-gallery/js/lightgallery-all.js')}}"></script>
         <!-- endinject -->
         
-        <script type="text/javascript" src='https://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
+        <!-- <script type="text/javascript" src='https://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
         <script type="text/javascript" src="{{asset('js/locationpicker.jquery.js')}}"></script>
 
-        <script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/ip-address.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/ip-address.js"></script> -->
         
         <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
         <script src="{{asset('gritter/js/jquery.gritter.min.js')}}"></script>
@@ -487,13 +487,13 @@
         </script>
         
         <!-- End custom js for this page-->
-        <script src="{{asset('vendors/documentacion/index.all.min.js')}}"></script>
-        <script src="{{asset('vendors/documentacion/popper.min.js')}}"></script>
+        <!-- <script src="{{asset('vendors/documentacion/index.all.min.js')}}"></script>
+        <script src="{{asset('vendors/documentacion/popper.min.js')}}"></script> -->
        
-        <script type="text/javascript" src="{{asset('js/paginicio/floating-wpp.min.js')}}"></script>
-        <link rel="stylesheet" href="{{asset('css/floating-wpp.min.css')}}">
+        <!-- <script type="text/javascript" src="{{asset('js/paginicio/floating-wpp.min.js')}}"></script>
+        <link rel="stylesheet" href="{{asset('css/floating-wpp.min.css')}}"> -->
         <script src="{{asset('vendors/ckeditor/ckeditor.js')}}"></script>
-        <script>
+        <!-- <script>
             tippy('.icono', {
                 content: 'global content',
                 animation: 'perspective',
@@ -501,7 +501,7 @@
                 arrowType: 'sharp',
                 interactive: true,
             })
-        </script>
+        </script> -->
         
         <script type="text/javascript">
             $(document).on("mouseup",function(e) {
