@@ -10,7 +10,7 @@ class CRMController extends Controller
 {
     public function closeSesion(){
         Auth::logout();
-        return redirect()->route("login");
+        return redirect("/what/login");
     }
     private function getInfo(){
         $usuarios =  DB::table("users")
@@ -55,7 +55,11 @@ class CRMController extends Controller
         file_put_contents("uniqueid",$unique);
         switch ($request->input("action")) {
             case 'getChat':
-
+                
+                DB::table("chats_whatsapp")
+                        ->where('number',"=",explode("@",$request->input("id"))[0])
+                        ->update(['alerta'=>'no']);
+                
                 $sms = DB::table("messages_whatsapp")
                                 ->where("idChat","=",$request->input("id"))
                                 ->get();
@@ -137,10 +141,70 @@ class CRMController extends Controller
 
                                 break;
             case 'closeChat':
-                DB::statement("UPDATE `chats_whatsapp` set `estado`= 'cerrado' where number='".explode("@",$request->input("id"))[0]."'");
+                /*
+                $origen = DB::table("chats_whatsapp")
+                            ->where("number","=",explode("@",$request->input("id"))[0])
+                            ->first();
+                $operador = DB::table("users")
+                                        ->where("id","=",Auth::user()->id)
+                                        ->first();
+
+                $anterior = DB::table("users")
+                                        ->where("id","=",$origen->asigned_to)
+                                        ->first();
+
+                if($origen->estado == "abierto"){
+                    $dato = [
+                        "type"=>"closed",
+                        "origen"=>$origen->asigned_to,
+                        "log"=>"El operador ".$operador->name." cerro el chat ".date("d/m/Y H:i:s")." que estaba ".isset($anterior->name)?("asignado a ".$anterior->name):("Sin asignar")." antes del cierre",
+                        "number"=>explode("@",$request->input("id"))[0]
+                    ];
+    
+                    DB::table("logs")
+                                ->insert($dato);
+                }
+                */
+                DB::statement("UPDATE `chats_whatsapp` set `estado`= 'cerrado', `notRead` = '0',`asigned_to` = '0' where number='".explode("@",$request->input("id"))[0]."'");
                 return "true";
                 break;
             case 'changeTecnico':
+                /*
+                $origen = DB::table("chats_whatsapp")
+                                ->where("number","=",explode("@",$request->input("id"))[0])
+                                ->first();
+
+                $operador = DB::table("users")
+                                        ->where("id","=",Auth::user()->id)
+                                        ->first();
+
+                $opOrigen = DB::table("users")
+                                        ->where("id","=",$origen->asigned_to)
+                                        ->first();
+
+                $opDestino = DB::table("users")
+                                        ->where("id","=",$request->input("tecnico"))
+                                        ->first();
+                
+                                        
+                if($origen->estado == "abierto"){
+                    $dato = [
+                        "type"=>"asingned",
+                        "origen"=>$origen->asigned_to,
+                        "destino"=>$opDestino->id,
+                        "log"=>"El operador ".Auth::user()->id." asigno el chat a ".(isset($opDestino->name)?($opOrigen->name):("Sin asignar"))." que anteriormente estaba ".(isset($opOrigen->name)?("asignado a ".$opOrigen->name):("Sin asignar"))."",
+                        "number"=>explode("@",$request->input("id"))[0]
+                    ];
+    
+                    DB::table("logs")
+                                ->insert($dato);
+                }
+                */
+
+                DB::table("chats_whatsapp")
+                        ->where('number',"=",explode("@",$request->input("id"))[0])
+                        ->update(['alerta'=>'si']);
+
                 DB::statement("UPDATE `chats_whatsapp` set `asigned_to`= '".$request->input("tecnico")."' where number='".explode("@",$request->input("id"))[0]."'");
                 return "true";
                 break;

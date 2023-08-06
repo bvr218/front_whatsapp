@@ -17,7 +17,7 @@ class loginController extends Controller
             "password"=>$password,
         ];
         if(Auth::attempt($credentials)){
-            return redirect("/whatsapp");
+            return redirect("https://vive.com.co:8443/what/whatsapp");
         }else{
             return back()->with("error","Usuario o Contraseña incorrecta");
         }

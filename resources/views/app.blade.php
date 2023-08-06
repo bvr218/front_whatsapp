@@ -11,26 +11,26 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>Whatsapp</title>
         
-        <link rel="shortcut icon" href="{{asset('images/Empresas/Empresa1/favicon.png')}}" />
-        <link rel="stylesheet" href="{{asset('gritter/css/jquery.gritter.css')}}"> 
+        <link rel="shortcut icon" href="https://vive.com.co:8443/what/images/Empresas/Empresa1/favicon.png" />
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/gritter/css/jquery.gritter.css"> 
         <!-- <link rel="stylesheet" href="{{asset('vendors/iconfonts/mdi/css/materialdesignicons.min.css')}}"> -->
-        <link rel="stylesheet" href="{{asset('vendors/css/vendor.bundle.base.css')}}">
-        <link rel="stylesheet" href="{{asset('vendors/css/vendor.bundle.addons.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{asset('vendors/DataTables/datatables.min.css')}}"/>
-        <link rel="stylesheet" type="text/css" href="{{asset('vendors/bootstrap-selectpicker/css/bootstrap-select.min.css')}}"/>
-        <link rel="stylesheet" href="{{asset('vendors/fontawesome/css/all.css')}}" />
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/css/vendor.bundle.base.css">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/css/vendor.bundle.addons.css">
+        <link rel="stylesheet" type="text/css" href="https://vive.com.co:8443/what/vendors/DataTables/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://vive.com.co:8443/what/vendors/bootstrap-selectpicker/css/bootstrap-select.min.css"/>
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/fontawesome/css/all.css" />
         <!-- <link rel="stylesheet" type="text/css" href="{{asset('vendors/flag-icon-css/css/flag-icon.min.css')}}"/> -->
-        <link rel="stylesheet" type="text/css" href="{{asset('vendors/sweetalert2/sweetalert2.min.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="https://vive.com.co:8443/what/vendors/sweetalert2/sweetalert2.min.css"/>
         <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins"> -->
         <!-- <link rel="stylesheet" href="{{asset('vendors/bootstrap-datepicker/css/gijgo.min.css')}}">
         <link rel="stylesheet" href="{{asset('vendors/morris/morris.css')}}">
         <link rel="stylesheet" href="{{asset('vendors/profile-picture/profile-picture.css')}}"> -->
-        <link rel="stylesheet" href="{{asset('vendors/dropify/dropify.css')}}">
-        <link rel="stylesheet" href="{{asset('vendors/dropzone/dropzone.css')}}">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/dropify/dropify.css">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/dropzone/dropzone.css">
         <!-- <link rel="stylesheet" href="{{asset('vendors/light-gallery/css/lightgallery.css')}}"> -->
-        <link rel="stylesheet" href="{{asset('vendors/autocomplete/jquery.auto-complete.css')}}">
-        <link rel="stylesheet" href="{{asset('css/style.css')}}">
-        <link rel="stylesheet" href="{{asset('css/documentacion.css')}}">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/vendors/autocomplete/jquery.auto-complete.css">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/css/style.css">
+        <link rel="stylesheet" href="https://vive.com.co:8443/what/css/documentacion.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
         
         <style>
@@ -275,19 +275,15 @@
             </style>
         @yield('style')
     </head>
-    <body>
+    <body style="height: 100vh;">
         @if(Auth::user()->online === 0)
         @php
             Auth::logout();
             return Redirect::to('login');
         @endphp
         @endif
-        <div style="display:flex; background:#48d948; min-height:50px; padding-top:3px">
-            <span style="margin-left:40px; margin-top:10px">Interactuando como: ({{Auth::user()->name}})</span>
-            <span style="margin-left:calc(100% - 350px)"><a class="m-auto" href="{{route('closeSesion')}}"><i style="padding-top: 6px;" class="fa fa-sign-out-alt fa-2x"></i></a></span>
-        </div>
         <div id="contenedor_carga">
-            <img id="carga" src="{{asset('images/gif-tuerca.gif')}}">
+            <img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">
         </div>
         <div class="loader"></div>
         <div class="container-scroller">
@@ -297,7 +293,7 @@
                 <!-- partial:partials/_sidebar.html -->
                 <!-- partial -->
                 <div >
-                    <div class="content-wrapper">
+                    <div class="content-wrapper pl-0 pr-0">
                         <div class="grid-margin stretch-card">
                             <div class="card">
                                 <div class="body-card">
@@ -324,35 +320,35 @@
         <!-- container-scroller -->
         
         <!-- plugins:js -->
-        <script src="{{asset('vendors/js/vendor.bundle.base.js')}}"></script>
-        <script src="{{asset('vendors/js/vendor.bundle.addons.js')}}"></script>
+        <script src="https://vive.com.co:8443/what/vendors/js/vendor.bundle.base.js"></script>
+        <script src="https://vive.com.co:8443/what/vendors/js/vendor.bundle.addons.js"></script>
         <!-- endinject -->
         <!-- Plugin js for this page-->
         <!-- End plugin js for this page-->
         <!-- inject:js -->
         <!-- <script src="{{asset('js/off-canvas.js')}}"></script> -->
         <!-- <script src="{{asset('js/misc.js')}}"></script> -->
-        <script type="text/javascript" src="{{asset('vendors/DataTables/datatables.min.js')}}"></script>
+        <script type="text/javascript" src="https://vive.com.co:8443/what/vendors/DataTables/datatables.min.js"></script>
         <!-- <script type="text/javascript" src="{{asset('js/CollapsibleLists.js')}}"></script> -->
-        <script type="text/javascript" src="{{asset('vendors/bootstrap-selectpicker/js/bootstrap-select.min.js')}}"></script>
+        <script type="text/javascript" src="https://vive.com.co:8443/what/vendors/bootstrap-selectpicker/js/bootstrap-select.min.js"></script>
         <!-- <script src="{{asset('vendors/bootstrap-datepicker/js/gijgo.min.js')}}"></script> -->
         <!-- <script src="{{asset('vendors/bootstrap-datepicker/js/messages/messages.es-es.min.js')}}"></script> -->
         <!-- Custom js for this page-->
         <!-- <script type="text/javascript" src="{{asset('vendors/validation/jquery.validate.min.js')}}"></script>
         <script type="text/javascript" src="{{asset('vendors/validation/localization/messages_es.js')}}"></script> -->
         <!-- <script type="text/javascript" src="{{asset('js/jquery.mask.min.js')}}"></script> -->
-        <script type="text/javascript" src="{{asset('vendors/sweetalert2/sweetalert2.min.js')}}"></script>
+        <script type="text/javascript" src="https://vive.com.co:8443/what/vendors/sweetalert2/sweetalert2.min.js"></script>
         <!-- <script type="text/javascript" src="{{asset('vendors/morris/morris.min.js')}}"></script> -->
-        <script type="text/javascript" src="{{asset('vendors/sortable/jquery.sortable.min.js')}}"></script>
+        <script type="text/javascript" src="https://vive.com.co:8443/what/vendors/sortable/jquery.sortable.min.js"></script>
         <!-- <script type="text/javascript" src="{{asset('vendors/autocomplete/jquery.auto-complete.js')}}"></script>
         <script type="text/javascript" src="{{asset('vendors/profile-picture/profile-picture.js')}}"></script> -->
         <!-- <script type="text/javascript" src="{{asset('vendors/dropify/dropify.js')}}"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
         <!-- <script src="{{asset('js/paginicio/planes.js')}}"></script> -->
         <!-- Dropzone Plugin Js -->
-        <script src="{{asset('vendors/dropzone/dropzone.js')}}"></script>
+        <script src="https://vive.com.co:8443/what/vendors/dropzone/dropzone.js"></script>
         <!-- Light Gallery Plugin Js -->
-        <script src="{{asset('vendors/light-gallery/js/lightgallery-all.js')}}"></script>
+        <script src="https://vive.com.co:8443/what/vendors/light-gallery/js/lightgallery-all.js"></script>
         <!-- endinject -->
         
         <!-- <script type="text/javascript" src='https://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
@@ -361,11 +357,18 @@
         <script src="//cdn.datatables.net/plug-ins/1.12.1/sorting/ip-address.js"></script> -->
         
         <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
-        <script src="{{asset('gritter/js/jquery.gritter.min.js')}}"></script>
+        <script src="https://vive.com.co:8443/what/gritter/js/jquery.gritter.min.js"></script>
         <div class="d-none" id="audioContainer"></div>
         <script type="text/javascript">
-            const audioElement = new Audio('{{asset("images/alerta.mp3")}}');
-            const audioElementA = new Audio('{{asset("images/asig.mp3")}}');
+            Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") {
+                    // El usuario concedió el permiso
+                } else {
+                    // El usuario bloqueó las notificaciones
+                }
+            });
+            const audioElement = new Audio('https://vive.com.co:8443/what/images/alerta.mp3');
+            const audioElementA = new Audio('https://vive.com.co:8443/what/images/asig.mp3');
             var _token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             @php
                 use Illuminate\Support\Facades\DB;
@@ -396,52 +399,90 @@
                 })
 
                 socketSerVER.on('newmessagewat', function(datos) {
-                    if(datos?.author!=null){
+                    
 
-                    }else{
-                        
-                        audioElement.play();
-                        
-                        let typechats = {
-                            "video": "  <span class = 'fas fa-video fa-lg' ></span> Video",
-                            "ptt": "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
-                            "audio": "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
-                            "image": "  <span class = 'fas fa-image fa-lg' ></span> Imagen",
-                            "sticker": "  <span class = 'fas fa-file fa-lg' ></span> Sticker",
-                            "document": "  <span class = 'fas fa-file-archive fa-lg' ></span> Archivo",
-                            "location": "  <span class = 'fas fa-map fa-lg' ></span> Ubicacion",
-                            "call_log": "  <span style = 'color:red' class = 'fa fa-phone fa-lg' ></span> Llamada perdida ",
-                            "e2e_notification" :"Respuesta automatica",
-                            "ciphertext" : "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
-                            "revoked" : "<span class = 'fa fa-ban fa-lg' ></span> Elimino el mensaje",
-                            "vcard" : "<span class = 'fa fa-user fa-lg' ></span> Contacto",
-                            "notification_template" : "<span class = 'fa fa-clock-o fa-lg' ></span> Aviso whatsapp",
-                            "gp2" : "<span class = 'fa fa-clock-o fa-lg' ></span> Aviso whatsapp",
-                        };
-                        if(!datos.isStatus && (datos.type!="e2e_notification" && datos.type!="notification_template" && datos.type!="g2p")){
-                            if(datos.type != "chat"){
-                                datos._data.body = typechats[datos.type];
-                            }
-                            if(!datos?.picurl){
-                                datos.picurl = "https://ramenparados.com/wp-content/uploads/2019/03/no-avatar-png-8.png";
-                            }
-                            nombre = datos.to.replace("@c.us","");
-                            if(datos?.contact){
-                                if(datos.contact?.name){
-                                    datos._data.notifyName = datos.contact.name;
-                                }else{
-                                    datos._data.notifyName = datos.contact.pushname;
+                        if(datos?.author!=null){
+    
+                        }else{
+                            
+                           
+                            
+                            let typechats = {
+                                "video": "  <span class = 'fas fa-video fa-lg' ></span> Video",
+                                "ptt": "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
+                                "audio": "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
+                                "image": "  <span class = 'fas fa-image fa-lg' ></span> Imagen",
+                                "sticker": "  <span class = 'fas fa-file fa-lg' ></span> Sticker",
+                                "document": "  <span class = 'fas fa-file-archive fa-lg' ></span> Archivo",
+                                "location": "  <span class = 'fas fa-map fa-lg' ></span> Ubicacion",
+                                "call_log": "  <span style = 'color:red' class = 'fa fa-phone fa-lg' ></span> Llamada perdida ",
+                                "e2e_notification" :"Respuesta automatica",
+                                "ciphertext" : "  <span class = 'fas fa-microphone fa-lg' ></span> Audio",
+                                "revoked" : "<span class = 'fa fa-ban fa-lg' ></span> Elimino el mensaje",
+                                "vcard" : "<span class = 'fa fa-user fa-lg' ></span> Contacto",
+                                "notification_template" : "<span class = 'fa fa-clock-o fa-lg' ></span> Aviso whatsapp",
+                                "gp2" : "<span class = 'fa fa-clock-o fa-lg' ></span> Aviso whatsapp",
+                            };
+                            if(!datos.isStatus && (datos.type!="e2e_notification" && datos.type!="notification_template" && datos.type!="g2p")){
+                                if(datos.type != "chat"){
+                                    datos._data.body = typechats[datos.type];
                                 }
-                            }
-                            alertawhat(
-                                {
-                                    nombre:datos._data.notifyName,
-                                    mensaje:datos._data.body,
-                                    avatar:datos.picurl
+                                if(!datos?.picurl){
+                                    datos.picurl = "https://ramenparados.com/wp-content/uploads/2019/03/no-avatar-png-8.png";
                                 }
-                            );
+                                datos._data.notifyName = datos.to.replace("@c.us","");
+                                if(datos?.contact){
+                                    if(datos.contact?.name){
+                                        datos._data.notifyName = datos.contact.name;
+                                    }else{
+                                        datos._data.notifyName = datos.contact.pushname;
+                                    }
+                                }
+
+                                if ("Notification" in window) {
+                                // El navegador es compatible con notificaciones push
+
+                                if (Notification.permission === "granted") {
+                                    const options = {
+                                        body: datos.body,
+                                        icon: datos.picurl
+                                    };
+                                    new Notification(datos._data.notifyName, options);
+                                } else if (Notification.permission === "denied") {
+                                    audioElement.play();
+                                    alertawhat(
+                                    {
+                                        nombre:datos._data.notifyName,
+                                        mensaje:datos._data.body,
+                                        avatar:datos.picurl
+                                    }
+                                );
+                                } else {
+                                    audioElement.play();
+                                    alertawhat(
+                                    {
+                                        nombre:datos._data.notifyName,
+                                        mensaje:datos._data.body,
+                                        avatar:datos.picurl
+                                    }
+                                );
+                                }
+                                } else {
+                                    audioElement.play();
+                                    alertawhat(
+                                    {
+                                        nombre:datos._data.notifyName,
+                                        mensaje:datos._data.body,
+                                        avatar:datos.picurl
+                                    }
+                                );
+                                }
+
+
+                                
+                            }
                         }
-                    }
+                    
                 })
                 socketSerVER.on('closesion', function(data) {
                     swal({
@@ -492,7 +533,7 @@
        
         <!-- <script type="text/javascript" src="{{asset('js/paginicio/floating-wpp.min.js')}}"></script>
         <link rel="stylesheet" href="{{asset('css/floating-wpp.min.css')}}"> -->
-        <script src="{{asset('vendors/ckeditor/ckeditor.js')}}"></script>
+        <script src="https://vive.com.co:8443/what/vendors/ckeditor/ckeditor.js"></script>
         <!-- <script>
             tippy('.icono', {
                 content: 'global content',

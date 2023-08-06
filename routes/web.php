@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Middleware\IpValidator;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,21 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::group(["middleware"=>"guest"],function(){
-    Route::get('/login/{usuario?}/{password?}',function($usuario="",$password=""){
-        return view("login",compact("usuario","password"));
-    })->name("login");
-    Route::post('/login/signin',[loginController::class,'signin'])->name("login.signin");
-});
 
-Route::group(["middleware"=>"auth"],function(){
-    Route::get('/whatsapp', [CRMController::class,'whatsapp'])->name('crm.whatsapp');
-    Route::get('/home', [CRMController::class,'whatsapp'])->name('crm.whatsapp');
-    Route::get('/closeSesion', [CRMController::class,'closeSesion'])->name('closeSesion');
+Route::middleware([IpValidator::class])->group(function(){
+    Route::group(["middleware"=>"guest"],function(){
+        Route::get('/what/login',function(){
+            return view("login");
+        })->name("login");
+        Route::get('/login',function(){
+            return view("login");
+        });
+        Route::post('/login/signin',[loginController::class,'signin'])->name("login.signin");
+    });
     
-    Route::post('/cartera/{action?}', [CRMController::class,'whatsappActions'])->name('crm.whatsapp');
+    Route::group(["middleware"=>"auth"],function(){
+        Route::get('/whatsapp', [CRMController::class,'whatsapp'])->name('crm.whatsapp');
+        Route::get('/closeSesion', [CRMController::class,'closeSesion'])->name('closeSesion');
+        
+        Route::post('/cartera/{action?}', [CRMController::class,'whatsappActions'])->name('crm.whatsapp');
+    });
 });

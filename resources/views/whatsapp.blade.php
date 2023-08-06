@@ -244,7 +244,7 @@
     }
     .chatContainerScroll{
         height: calc(100% - 164px);
-        margin-top: 5px;
+        margin-top: 30px;
         position: inherit;
         overflow: auto;
         padding: 0px 30px;
@@ -506,7 +506,7 @@
         width: auto !important;
     }
     .waadjunto {
-        width: 100px;
+        width: 57px;
         position: relative;
         height: 70px;
         z-index: 4;
@@ -603,7 +603,7 @@
     }
 
     .widget-input-container .widget-input-icon a {
-        padding: 18px;
+        padding: 0px;
     }
 
 
@@ -767,7 +767,7 @@
 
 
     .bg-w{
-        background-image: url({{asset('images/bg-w.png')}});
+        background-image: url(https://vive.com.co:8443/what/images/bg-w.png);
         position: absolute;
         top: 0;
         width: 100%;
@@ -889,7 +889,7 @@
 
     @media (max-width: 767.98px){
         .widget-input-container .widget-input-box {
-        width: calc(100% - 120px);
+        width: calc(100% - 140px);
         margin-left: 0px;
         }
         .nosesion{
@@ -958,7 +958,7 @@
                             
                         >
                             <div id="qr_code" style="position: relative;">
-                                <img width="100px" src="{{asset('images/gif-tuerca.gif')}}">
+                                <img width="100px" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">
                                 <label style="position: absolute;top: 76%;left: 21%;">Espere...</label>
                             </div>
                         </div>
@@ -996,14 +996,16 @@
                         </div>
                     </div>
                 </div>
-                <div style="position: absolute;top: -23px;">
-                    <a href="javascript:;"><span onClick="showInfo()" style="font-size: small;">Info del dispositivo</span></a>
-                </div>
-                <div style="position: absolute;top: -23px;left: calc(100% - 160px);">
-                    <a href="javascript:;"><span onclick="reloadButton()" style="font-size: small;">Cerrar sesion whatsapp</span></a>
-                </div>
+                @if(Auth::user()->id == 1)
+                    <div style="position: absolute;top: -23px;">
+                        <a href="javascript:;"><span onClick="showInfo()" style="font-size: small;">Info del dispositivo</span></a>
+                    </div>
+                    <div style="position: absolute;top: -23px;left: calc(100% - 160px);">
+                        <a href="javascript:;"><span onclick="reloadButton()" style="font-size: small;">Cerrar sesion whatsapp</span></a>
+                    </div>
+                @endif
                 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css">
-                <div class="allcontainerchats row bg-white m-1" style="height: calc(100vh - 120px);border-radius: 5px;box-shadow: 2px 2px 10px 1px #c0bebe;">
+                <div class="allcontainerchats row bg-white m-1" style="height: calc(100vh - 60px);border-radius: 5px;box-shadow: 2px 2px 10px 1px #c0bebe;">
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-12 m-0 p-0 users-container" style="height: calc(100% - 10px);">
                     <div class="input-group p-3 mt-2">
                         <div style="font-size: smaller;padding-left: 12px;max-width: 38px;" class="input-group-text">
@@ -1047,7 +1049,7 @@
                         </button>
                         </span>
                     </div>
-                    <ul class="users" id="listawhatssap">
+                    <ul class="users" style="position:relative; z-index:99" id="listawhatssap">
                         @php
                             $closed = [];
                         @endphp
@@ -1057,6 +1059,10 @@
                                     $closed[] = $chats;
                                     continue;
                                 }
+                                $dnone=false;
+                                if((($chats->asigned_to != Auth::user()->id) && $chats->asigned_to != 0) && (Auth::user()->id != 1)){
+                                    $dnone=true;
+                                }
                                 $filterData = array_filter($info[1],function($item) use ($chats) {
                                     return $item["id"] == $chats->asigned_to;
                                 });
@@ -1064,7 +1070,7 @@
                                 $asigned = array_values($filterData)[0]["nombres"];
                                 
                             @endphp
-                            <li class="person" data-id="{{$chats->number}}@c.us" data-tecnico="{{$chats->asigned_to}}" data-estado="{{$chats->estado=='abierto'?0:1}}" data-time="{{strtotime($chats->last_update)}}" data-type="chat">
+                            <li class="person {{$dnone?('d-none'):('')}}" data-id="{{$chats->number}}@c.us" data-tecnico="{{$chats->asigned_to}}" data-estado="{{$chats->estado=='abierto'?0:1}}" data-time="{{strtotime($chats->last_update)}}" data-type="chat">
                                     <span class="d-none"></span>
                                     <div class="user" data-toggle="tooltip" title="" data-original-title="{{$chats->name}}">
                                         <img src="{{$chats->photo}}">
@@ -1080,6 +1086,7 @@
                                         <span class="time">{{strtotime($chats->last_update)}}</span>
                                     </p>
                                     <span class="conter-chat-user">{{$chats->notRead <= 0 ? "":$chats->notRead}}</span>
+                                    <span id="alertaChat" style="background:red;text-align: center;border-radius: 1.1em;color: #fff;min-width: 23px;margin-top: 0px;margin-bottom: 0;padding: 0px 6px;position: absolute;font-weight: 600;bottom: 49px;right: 61px;" class="{{($chats->alerta != 'no' && $chats->asigned_to == Auth::user()->id) ? (""):('d-none')}} ">asignado</span>
                                     <div class="typing" style="display:none">
                                         <span class="nametyping"></span> está escribiendo <span class="animate-typing">
                                         <span class="dot"></span>
@@ -1091,6 +1098,10 @@
                         @endforeach
                         @foreach($closed as $chats)
                             @php
+                                $dnone=false;
+                                if((Auth::user()->id != 1)){
+                                    $dnone=true;
+                                }
                                 $filterData = array_filter($info[1],function($item) use ($chats) {
                                     return $item["id"] == $chats->asigned_to;
                                 });
@@ -1098,7 +1109,7 @@
                                 $asigned = array_values($filterData)[0]["nombres"];
                                 
                             @endphp
-                            <li class="person" data-id="{{$chats->number}}@c.us" data-tecnico="{{$chats->asigned_to}}" data-estado="{{$chats->estado=='abierto'?0:1}}" data-time="{{strtotime($chats->last_update)}}" data-type="chat">
+                            <li class="person {{$dnone?('d-none'):('')}}" data-id="{{$chats->number}}@c.us" data-tecnico="{{$chats->asigned_to}}" data-estado="{{$chats->estado=='abierto'?0:1}}" data-time="{{strtotime($chats->last_update)}}" data-type="chat">
                                 <span class="d-none"></span>
                                 <div class="user" data-toggle="tooltip" title="" data-original-title="{{$chats->name}}">
                                 <img src="{{$chats->photo}}">
@@ -1158,6 +1169,7 @@
                         <span>
                             <img src="https://www.bootdey.com/img/Content/avatar/avatar3.png">
                             <span class="name" contenteditable="true" style="padding: 10px;"></span>
+                            (<small><span class="number" contenteditable="false" style="padding: 10px;"></span></small>)
                         </span>
                         <div class="float-end" data-toggle="tooltip" title="" data-original-title="Marcar como cerrado el  Chat">
                             <span style="padding-left: 8px;" class="closechatw fas fa-user-times" id="closedchat"></span>
@@ -1166,7 +1178,8 @@
                             <a class="p-0 m-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span style="padding-left: 10px;" class="fas fa-user closechatw fa-lg" data-toggle="tooltip" title="" data-original-title="Asignar operador al Chat"></span>
                         </a>
-                        <div class="dropdown-menu listaoperadores" style="line-height: normal;"> 
+                        <div class="dropdown-menu listaoperadores" style="line-height: normal;max-height: 313px;overflow: auto;position: absolute;will-change: transform;top: 57px;left: -75px;transform: translate3d(310px, -24px, 0px);"> 
+                            
                         </div>
                         </div>
                     </div>
@@ -1186,30 +1199,35 @@
                         <input type="hidden" id="mimefile" value="image/jpeg">
 
                         <div class="widget-input-container" style="position:relative">
-                            <div class="d-none" id="uploads_files" style="width: 170px;position: absolute;height: 170px;border-width: 2px;border-radius: 21px;top: -187px;left: 2px;border-style: dotted;background-color: darkgrey;">
-                                <div id="removeFile" style="position:relative; top:0px;">
-                                    <i class="fa fa-times-circle " style="position: absolute;right: 6px;top: 7px;"></i>
-                                </div>
-                                <div id="previewFile" style="padding-left: 21px;padding-top: 13px;">
-                                </div>
-                                <div id="nameFile" style="font-size: small;position: relative;top: -15px;text-align: center;left: 0px;">descarga.jpeg</div>
-                            </div>
-                            <a class="iconadjuntowa"><i class="fas fa-upload"></i></a>
-                            <div class="widget-input-icon waadjunto dz-clickable dz-started dz-max-files-reached">
-                            </div>
-                            <div class="widget-input-box p-auto m-auto">
-                                <textarea style="margin-top: 0px; padding-top:20px; padding-right:15px;" type="text" class="form-control" placeholder="Enviar mensaje" id="sendNewMessage"></textarea>
-                            </div>
-                            <div class="widget-input-icon d-none">
-                                <a href="#" class="text-grey">
-                                    <i class="fa fa-smile"></i>
-                                </a>
-                            </div>
-                            <div class="widget-input-divider d-none"></div>
-                            <div class="widget-input-icon mt-2">
-                                <a href="javascript:;" class="text-grey record-wa" style="display: none;"><i class="fa f-s-25 fa-microphone fa-2x"></i></a>
-                                <a href="javascript:;" class="text-red stop-wa parpadea" style="display: none;"><i class="fas f-s-25 fa-stop fa-2x"></i></a>
-                            </div>
+                        <div id="buttonsMessages" class="row">
+                        <div class="d-none" id="uploads_files" style="width: 170px;position: absolute;height: 170px;border-width: 2px;border-radius: 21px;top: -187px;left: 2px;border-style: dotted;background-color: darkgrey;">
+                <div id="removeFile" style="position:relative; top:0px;">
+                    <i class="fa fa-times-circle " style="position: absolute;right: 6px;top: 7px;"></i>
+                </div>
+                <div id="previewFile" style="padding-left: 21px;padding-top: 13px;">
+                </div>
+                <div id="nameFile" style="font-size: small;position: relative;top: -15px;text-align: center;left: 0px;">descarga.jpeg</div>
+            </div>
+            <div class="widget-input-icon waadjunto dz-clickable dz-started dz-max-files-reached" style="margin-right: 19px;margin-top: 9px;">
+                <div class="iconadjuntowa" style="margin-top: -9px;"><i onclick="$('.waadjunto').click()" id="liWa" style="font-size: 1em;" class="fas f-s-25 fa-upload"></i></div>
+            </div>
+            <div id="textBox" class="widget-input-box p-auto ml-4" style="margin-left: 4px;">
+                <textarea style="margin-top: 0px; padding-top:20px; padding-right:15px;" type="text" class="form-control" placeholder="Enviar mensaje" id="sendNewMessage"></textarea>
+            </div>
+            <div class="widget-input-icon d-none">
+                <a href="#" class="text-grey">
+                    <i class="fa fa-smile"></i>
+                </a>
+            </div>
+            <div class="widget-input-divider d-none"></div>
+            <div id="micButton" class="widget-input-icon mt-1" style="
+            margin-left: 23px;
+            ">
+                <a href="javascript:;" class="text-grey record-wa" style=""><i class="fa f-s-25 fa-microphone fa-2x"></i></a>
+                <a href="javascript:;" class="text-red stop-wa parpadea" style="display: none;"><i class="fas f-s-25 fa-stop fa-2x"></i></a>
+            </div>
+
+                            
                         </div>
                     </div>
                 </div>
@@ -1273,6 +1291,342 @@
 <!-- This script tag will create OpusMediaRecorder.encoderWorker. -->
 <script src="https://cdn.jsdelivr.net/npm/opus-media-recorder@latest/encoderWorker.umd.js"></script>
 <script>
+    $(document).ready(()=>{
+        const mediaQuery = window.matchMedia("(max-width: 767.98px)");
+        $("#listaoperadores").select2();
+        let info = localStorage.getItem("info");
+        if(info == null){
+            info = {
+                frame:false,
+                activeChat:0,
+                size:false
+            };
+            localStorage.setItem("info",JSON.stringify(info));
+        }else{
+            info = JSON.parse(info);
+        }
+        if (!mediaQuery.matches) {
+            // El tamaño del medio coincide (pantalla pequeña)
+            $(".iconadjuntowa").css("margin-top","-9px");
+            $("#liWa").css("font-size","1em");
+            $("#textBox").css("margin-left","4px").addClass("ml-4").removeClass("m-0");
+            $("#micButton").addClass("mt-1").removeClass("mt-2");
+        } else {
+            // El tamaño del medio no coincide (pantalla grande)
+            $(".iconadjuntowa").css("margin-top","0px");
+            $("#liWa").css("font-size","1.5em");
+            $("#textBox").css("margin-left","0px").removeClass("ml-4").addClass("m-0");
+            $("#micButton").addClass("mt-2").removeClass("mt-1");
+        }
+        mediaQuery.addListener(handleMediaChange);
+        function handleMediaChange(){
+            let info = localStorage.getItem("info");
+            if(info == null){
+                info = {
+                    frame:false,
+                    activeChat:0,
+                    size:false
+                };
+            }else{
+                info = JSON.parse(info);
+            }
+
+            if (!mediaQuery.matches) {
+                if($(".person.active-user").length>0){
+                    $('.users-container').show();
+                    $('.chatback').hide();
+                }
+                
+                // El tamaño del medio coincide (pantalla pequeña)
+                $(".iconadjuntowa").css("margin-top","-9px");
+                $("#liWa").css("font-size","1em");
+                $("#textBox").css("margin-left","4px").addClass("ml-4").removeClass("m-0");
+                $("#micButton").addClass("mt-1").removeClass("mt-2");
+            } else {
+                // El tamaño del medio no coincide (pantalla grande)
+                if($(".person.active-user").length>0){
+                    $('.users-container').hide();
+                    $('.chatback').show();
+                }
+                $(".iconadjuntowa").css("margin-top","0px");
+                $("#liWa").css("font-size","1.5em");
+                $("#textBox").css("margin-left","0px").removeClass("ml-4").addClass("m-0");
+                $("#micButton").addClass("mt-2").removeClass("mt-1");
+            }
+        }
+        
+        
+        $('#content').on("click", ".users-container .person", function() {
+            var idchatpersona = $(this).data('id');
+            info.activeChat = idchatpersona;
+        })
+        
+        if(info.activeChat == 0){
+
+            if (!info.size) {
+                // El tamaño del medio coincide (pantalla pequeña)
+                $('.users-container').show();
+                $('.chatback').hide();
+            } else {
+                // El tamaño del medio no coincide (pantalla grande)
+                
+                $('.users-container').show();
+                $('.chatback').hide();
+            }
+        }else{
+
+            if (info.size) {
+                // El tamaño del medio coincide (pantalla pequeña)
+                $('.users-container').show();
+                $('.chatback').hide();
+    
+            } else {
+                // El tamaño del medio no coincide (pantalla grande)
+                
+                $('.users-container').hide();
+                $('.chatback').show();
+            }
+        }
+
+
+        if(info.activeChat!=0){
+            $('.chat-container').show();
+            $('.nosesion').hide();
+            $('#urlfile').val('');
+            $('#mimefile').val('');
+            $('#showtyping').hide();
+            $('.listaoperadores .itemoperador.active').removeClass('active');
+            $('.listaoperadores a[data-asignado="' + $('li[data-id="' + info.activeChat + '"]').attr('data-tecnico') + '"]').addClass('active');
+            if ($('li[data-id="' + info.activeChat + '"]').attr('data-tecnico') > 0) {
+                $('.messageasigned').show();
+                $('.messageasigned .nameoperador').text(operadores[$('li[data-id="' + info.activeChat + '"]').attr('data-tecnico')]);
+            } else {
+                $('.messageasigned').hide();
+                $('.messageasigned .nameoperador').text('');
+            }
+            $('.users-container .person').removeClass('active-user');
+            $('li[data-id="' + info.activeChat + '"]').addClass('active-user');
+            $('.selected-user,.chat-container').hide();
+            $('.loader-full').show();
+            if ($(window).width() < 768) {
+                $('.col-chats').hide();
+            }
+            $('.chatContainerScroll').empty();
+            $('.selected-user img').attr('src', $('img', 'li[data-id="' + info.activeChat + '"]').attr('src'));
+
+            $('.selected-user .name').html($('.name', 'li[data-id="' + info.activeChat + '"]').html());
+            $('.selected-user .number').html($('.active-user').attr("data-id").split("@")[0]);
+            $('.selected-user').show();
+
+            $('li[data-id="' + info.activeChat + '"] #alertaChat').addClass("d-none");
+
+            if('{{Auth::user()->id}}'!=1 && $('li[data-id="' + info.activeChat + '"]').attr("data-tecnico")!='{{Auth::user()->id}}' ){
+
+                $.post("https://vive.com.co:8443/what/cartera", {
+                    id: info.activeChat,
+                    action:"changeTecnico",
+                    _token,
+                    tecnico: '{{Auth::user()->id}}'
+                });
+
+                socketSerVER.emit('changeoperador', {
+                    tecnico: '{{Auth::user()->id}}',
+                    id: info.activeChat,
+                    name: '{{Auth::user()->name}}',
+                    cliente: $('li.person.active-user .name').text()
+                });
+            }
+
+            $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Obteniendo mensajes, por favor espere.</div>");
+            $.post("https://vive.com.co:8443/what/cartera",{action:"getChat",_token,id:info.activeChat})
+            .then((data)=>{
+                if(typeof data == "string"){
+                    data = JSON.parse(data);
+                }
+                if(data.salida == "success"){
+                    if(typeof data?.messages == "string"){
+                        data.messages = JSON.parse(data.messages);
+                    }
+                    let mensajes =  data.messages ;
+                    $('.loader-full').hide();
+                    $('.chat-container').show();
+                    $('.barrasend input').focus();
+                    for (let i = 0; i < mensajes.length; i++) {
+                        
+                        let datos = mensajes[i];
+                        let ubicacion;
+                        datos.fromMe == "1" || datos.fromMe === true ? ubicacion = "chat-right" : ubicacion = "chat-left";
+                        
+                        if(datos.hasMedia=="1" || datos.hasMedia === true){
+                            
+                            datos.type == "ptt"?datos.type = "audio":datos.type = datos.type;
+                            datos.type == "sticker"?datos.type = "image":datos.type = datos.type;
+
+                            switch(datos.type){
+                                case "document":
+                                    data =`
+                                    <li class="${ubicacion}">
+                                        <div class="chat-text">
+                                            <div >
+                                                <div id='${datos.id.id}'>
+                                                    <i onclick="verContenido('document','${datos.id.id}','${_token}','${datos._data.mimetype}')" class="fas fa-file-archive fa-5x" style="margin-left: 27px;"></i>
+                                                </div>
+                                                <small style='margin-left: 31px;'>Click 👆👆</small>
+                                            </div>
+                                            ${datos.body}
+                                            <div class="chat-hour" data-time="${datos.timestamp}">
+                                                <span class="timeelapsed">hace 18 horas</span>
+                                                <span class="${datos.id.id} d-none check-w-0">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    `; 
+                                    $(".chatContainerScroll").append(data);
+                                    
+                                    break;
+                                case "audio":
+                                    data =`
+                                    <li class="${ubicacion}">
+                                        <div class="chat-text">
+                                            <div >
+                                                <div id='${datos.id.id}'>
+                                                    <i onclick="verContenido('audio','${datos.id.id}','${_token}','${datos._data.mimetype}')" class="fas fa-microphone fa-5x" style="margin-left: 27px;"></i>
+                                                </div>
+                                                <small style='margin-left: 31px;'>Click 👆👆</small>
+                                            </div>
+                                            ${datos.body}
+                                            <div class="chat-hour" data-time="${datos.timestamp}">
+                                                <span class="timeelapsed">hace 18 horas</span>
+                                                <span class="${datos.id.id} d-none check-w-0">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    `; 
+                                    $(".chatContainerScroll").append(data);
+                                    
+                                    break;
+                                case "image":
+                                    data =`
+                                    <li class="${ubicacion}">
+                                        <div class="chat-text">
+                                            <div >
+                                                <div id='${datos.id.id}'>
+                                                    <i onclick="verContenido('imagen','${datos.id.id}','${_token}','${datos._data.mimetype}')" class="fas fa-image fa-5x" style="margin-left: 27px;"></i>
+                                                </div>
+                                                <small style='margin-left: 31px;'>Click 👆👆</small>
+                                            </div>
+                                            ${datos.body}
+                                            <div class="chat-hour" data-time="${datos.timestamp}">
+                                                <span class="timeelapsed">hace 18 horas</span>
+                                                <span class="${datos.id.id} d-none check-w-0">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    `; 
+                                    $(".chatContainerScroll").append(data);
+                                    
+                                    break;
+                                case "video":
+                                    data =`
+                                    <li class="${ubicacion}">
+                                        <div class="chat-text">
+                                            <div >
+                                                <div id='${datos.id.id}'>
+                                                    <i onclick="verContenido('video','${datos.id.id}','${_token}','${datos._data.mimetype}')" class="fas fa-video fa-5x" style="margin-left: 27px;"></i>
+                                                </div>
+                                                <small style='margin-left: 31px;'>Click 👆👆</small>
+                                            </div>
+                                            ${datos.body}
+                                            <div class="chat-hour" data-time="${datos.timestamp}">
+                                                <span class="timeelapsed">hace 18 horas</span>
+                                                <span class="${datos.id.id} d-none check-w-0">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    `; 
+                                    $(".chatContainerScroll").append(data);
+                                    
+                                    break;
+                                default:
+                                    
+                                    break;
+                            }
+                        }else{
+
+                            if(datos.type == "location"){
+                                
+                                data =`
+                                <li class="${ubicacion}">
+                                    <div class="chat-text">
+                                        <div >
+                                            <div id='${datos.id.id}'>
+                                                <a target='_blank' href="https://www.google.com/maps?q=${datos.location?.latitude},${datos.location?.longitude}">
+                                                    <i class="fas fa-map fa-5x" style="margin-left: 27px;"></i>
+                                                </a>
+                                            </div>
+                                            <small style='margin-left: 31px;'>Click 👆👆</small>
+                                        </div>
+                                        <div class="chat-hour" data-time="${datos.timestamp}">
+                                            <span class="timeelapsed">hace 18 horas</span>
+                                            <span class="${datos.id.id} d-none check-w-0">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                `; 
+                                $(".chatContainerScroll").append(data);
+                            }else{
+                                let data =`
+                                <li class="${ubicacion}">
+                                    <div class="chat-text">
+                                        ${datos.body}
+                                        <div class="chat-hour" data-time="${datos.timestamp}">
+                                            <span class="timeelapsed">hace 18 horas</span>
+                                            <span class="${datos.id.id} d-none check-w-0">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                `; 
+                                $(".chatContainerScroll").append(data);
+                                
+                            }
+                        }
+                        
+                    }
+                    $('.chatContainerScroll').scrollTop($('.chatContainerScroll').prop("scrollHeight"));
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
+                    
+                    
+                    
+                    
+                }else{
+                    swal({
+                        title: data.message,
+                        type: data.salida,
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        cancelButtonColor: '#00ce68',
+                        cancelButtonText: 'Aceptar',
+                    }).then((result) => {
+                        if(data.salida == "success"){
+                            location.reload();
+                        }
+                    });
+                }
+                
+                conterunread();
+                actulizartime();
+                contermischats()
+            })
+            
+        }
+
+    })
 
     @if(!is_null($instancia) && !empty($instancia))
         @if($instancia->status == 0)
@@ -1287,12 +1641,12 @@
                     $("#chatsReady").html(data);
                 });
                 try{
-                    $.post("{{route('crm.whatsapp')}}",{action:"getChats",_token})
+                    $.post("https://vive.com.co:8443/what/cartera",{action:"getChats",_token})
                     .then((data)=>{
                         if(typeof data == "string"){
                             data = JSON.parse(data);
                         }
-                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                         swal({
                                 title: data.message,
                                 type: data.salida,
@@ -1308,7 +1662,7 @@
                         
                     })
                 }catch(err){
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     swal({
                             title: "Ocurrio un error obteniendo los chats de la instancia, comunicate con tu proveedor.",
                             type: "error",
@@ -1322,12 +1676,12 @@
             function reloadButton(){
                 $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Reiniciando la instancia, por favor espere.</div>");
                 try{
-                    $.post("{{route('crm.whatsapp')}}",{action:"reloadInstancia",_token})
+                    $.post("https://vive.com.co:8443/what/cartera",{action:"reloadInstancia",_token})
                     .then((data)=>{
                         if(typeof data == "string"){
                             data = JSON.parse(data);
                         }
-                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                         swal({
                                 title: data.message,
                                 type: data.salida,
@@ -1343,7 +1697,7 @@
                         }
                     })
                 }catch(err){
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     swal({
                             title: "Ocurrio un error reiniciando la instancia, comunicate con tu proveedor.",
                             type: "error",
@@ -1395,7 +1749,8 @@
                 await getChats()
             });
                     
-        @else            
+        @else 
+
             function getChats(){ 
                 $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Obteniendo chats, por favor espere.(<span id='chatsReady'>0</span>/<span id='chatsTotal'>0</span>)</div>");
                 socketSerVER.on('totalChats', function(data) {
@@ -1405,12 +1760,12 @@
                     $("#chatsReady").html(data);
                 });
                 try{
-                    $.post("{{route('crm.whatsapp')}}",{action:"getChats",_token})
+                    $.post("https://vive.com.co:8443/what/cartera",{action:"getChats",_token})
                     .then((data)=>{
                         if(typeof data == "string"){
                             data = JSON.parse(data);
                         }
-                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                        $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                         swal({
                                 title: data.message,
                                 type: data.salida,
@@ -1426,7 +1781,7 @@
                         
                     })
                 }catch(err){
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     swal({
                             title: "Ocurrio un error obteniendo los chats de la instancia, comunicate con tu proveedor.",
                             type: "error",
@@ -1484,7 +1839,7 @@
             }
             
             function contermischats() {
-                $('.sorterd .badge').text($('li.person[data-tecnico="{{$user = Auth::user()->id}}"]').length);
+                $('.sorterd .badge').text($('li.person[data-tecnico="{{Auth::user()->id}}"]').length);
                 $('.sorterc .badge').text($('li.person .conter-chat-user:not(:empty)').length);
                 $('.sorterb .badge').text($('li.person[data-tecnico="0"]').length);
             }
@@ -1547,9 +1902,9 @@
                         location.reload();
                     }, 2000);
                 });
-                $('.selected-user .name').on('keypress', function(e) {
+                $('.selected-user .name').on("keypress",function(e) {
                     if (e.which == 13 && $(this).text() !== '') {
-                        $.post("{{route('crm.whatsapp')}}", {
+                        $.post("https://vive.com.co:8443/what/cartera", {
                             action:"changeName",
                             _token,
                             id: $('.person.active-user').data('id'),
@@ -1636,7 +1991,7 @@
                 myDropzone = new Dropzone("div.waadjunto", {
                     maxFiles: 1,
                     acceptedFiles: "image/*,application/*,text/plain,audio/*,video/*",
-                    url: "{{route('uploadFile')}}",
+                    url: "https://vive.com.co:8443/what/api/uploadfile",
                     sending: function(data, xhr, formData) {
                         $(".iconadjuntowa").html('<i class="fa fa-spinner fa-spin"></i>');
                     },
@@ -1690,7 +2045,19 @@
                     if (response.estado) {
                         $('#urlfile').val(response.name);
                         $('#mimefile').val(response.mime);
-                        if ($('#mobile-indicator').is(':visible')) {
+
+                        let info = localStorage.getItem("info");
+                        if(info != null){
+                            info = JSON.parse(info);
+                        }else{
+                            info = {
+                                frame:false,
+                                activeChat:0,
+                                size:false
+                            };
+                        }
+
+                        if (info.size) {
                             var e = $.Event("keypress", {
                             which: 13
                             });
@@ -1699,14 +2066,38 @@
                     }
                 });
                 $("#closedchat").on("click", function() {
-                    $.post("{{route('crm.whatsapp')}}", {
+                    $.post("https://vive.com.co:8443/what/cartera", {
                         _token,
                         action:"closeChat",
                         id: $('.person.active-user').attr("data-id")
                     });
+                    
+                    let id = $('.person.active-user').attr("data-id");
                     $('.itemoperador[data-asignado="0"]').click();
                     $('.person.active-user').attr("data-estado", "1");
                     $('.users').find('li.active-user').appendTo('.users');
+                    socketSerVER.emit("closechat",{id});
+
+                    
+                    $('.listaoperadores .itemoperador.active').removeClass('active');
+                    $('.users-container .person').removeClass('active-user');
+                    $('.chat-container').hide();
+                    $('.users-container').show();
+                    $('.chatback').hide();
+                    
+                    let info = localStorage.getItem("info");
+                    if(info == null){
+                        info = {
+                            frame:false,
+                            activeChat:0,
+                            size:false
+                        };
+                    }else{
+                        info = JSON.parse(info);
+                    }
+                    info.activeChat = 0;
+                    localStorage.setItem("info",JSON.stringify(info));
+
                     setTimeout(() => {
                     contermischats();
                     }, 300);
@@ -1734,17 +2125,11 @@
                     }, 300);
                 });
                 $(document).on("click", "#sendnewchat", function() {
-                    if ($('#numbersender').val() == '') {
-                        alerta("error", "Debe indicar un número correcto");
-                    }
-                    if ($('#msjnewchat').val() == '') {
-                        alerta("error", "Debe indicar un mensaje");
-                    }
                     $('#NewContacto').modal('hide');
                     $('.loader-full').show();
                     let mensaje = $('#msjnewchat').val();
                     $('#msjnewchat').val('');
-                    $.post("{{route('crm.whatsapp')}}", {
+                    $.post("https://vive.com.co:8443/what/cartera", {
                         _token,
                         action:"sendMessage",
                         id: $('#numbersender').val() + '@c.us',
@@ -1774,7 +2159,8 @@
                         });
                     });
                     //ORDENA SIN LEER PRIMERO
-                $(document).on("click", ".sorterc", function() {
+                
+                    $(document).on("click", ".sorterc", function() {
                     $('.listsorter a').removeClass("active");
                     $(this).addClass("active");
                     $('.textlistorder').text($('.nameorder', this).text());
@@ -1804,7 +2190,7 @@
                     mouseenter: function() {
                         if ($('.lastmessage', this).text()) {
                             $(this).tooltip({
-                            title: $('.lastmessage', this).text(),
+                            title: $('.lastmessage', this).text().substring(0,200),
                             html: true,
                             container: '.users'
                             }).tooltip('show');
@@ -1819,13 +2205,46 @@
                     $('.chat-container').hide();
                     $('.users-container').show();
                     $('.chatback').hide();
+                    
+                    let info = localStorage.getItem("info");
+                    if(info == null){
+                        info = {
+                            frame:false,
+                            activeChat:0,
+                            size:false
+                        };
+                        localStorage.setItem("info",JSON.stringify(info));
+                    }else{
+                        info = JSON.parse(info);
+                    }
+                    info.activeChat = 0;
+                    localStorage.setItem("info",JSON.stringify(info));
                 })
 
                 $('#content').on("click", ".users-container .person", function() {
-                    if ($('#mobile-indicator').is(':visible')) {
+                    
+                    let info = localStorage.getItem("info");
+                    var idchatpersona = $(this).data('id');
+                    if(info != null){
+                        info = JSON.parse(info);
+                    }else{
+                        info = {
+                            frame:false,
+                            activeChat:0,
+                            size:false
+                        };
+                    }
+                    info.activeChat = idchatpersona;
+                    localStorage.setItem("info",JSON.stringify(info));
+
+                    if(!info.size){
                         $('.users-container').hide();
                         $('.chatback').show();
+                    }else{
+                        $('.users-container').show();
+                        $('.chatback').hide();
                     }
+
                     $('.chat-container').show();
                     $('.nosesion').hide();
                     $('#urlfile').val('');
@@ -1849,11 +2268,38 @@
                     }
                     $('.chatContainerScroll').empty();
                     $('.selected-user img').attr('src', $('img', this).attr('src'));
+
                     $('.selected-user .name').html($('.name', this).html());
+                    $('.selected-user .number').html($('.active-user').attr("data-id").split("@")[0]);
+
                     $('.selected-user').show();
-                    var idchatpersona = $(this).data('id');
+                   
+
+                    $('li[data-id="' + idchatpersona + '"] #alertaChat').addClass("d-none");
+
+
+
+
+
+                    if('{{Auth::user()->id}}'!=1 && $(this).attr("data-tecnico")!='{{Auth::user()->id}}' ){
+
+                        $.post("https://vive.com.co:8443/what/cartera", {
+                            id: idchatpersona,
+                            action:"changeTecnico",
+                            _token,
+                            tecnico: '{{Auth::user()->id}}'
+                        });
+    
+                        socketSerVER.emit('changeoperador', {
+                            tecnico: '{{Auth::user()->id}}',
+                            id: idchatpersona,
+                            name: '{{Auth::user()->name}}',
+                            cliente: $('li.person.active-user .name').text()
+                        });
+                    }
+
                     $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Obteniendo mensajes, por favor espere.</div>");
-                    $.post("{{route('crm.whatsapp')}}",{action:"getChat",_token,id:idchatpersona})
+                    $.post("https://vive.com.co:8443/what/cartera",{action:"getChat",_token,id:idchatpersona})
                     .then((data)=>{
                         if(typeof data == "string"){
                             data = JSON.parse(data);
@@ -2014,7 +2460,7 @@
                                 
                             }
                             $('.chatContainerScroll').scrollTop($('.chatContainerScroll').prop("scrollHeight"));
-                            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                             
                             
                            
@@ -2039,100 +2485,101 @@
                         contermischats()
                     })
                 });
-
-                $('#sendNewMessage').on('keypress', function(e) {
-                    if (e.keyCode === 13 && e.shiftKey) {
-                        return;
-                    }
-                    if (e.which == 13 && $('#urlfile').val().length > 0) {
-                        e.preventDefault();
-                        $('.loader-full').show();
-                        let mensaje = $('#sendNewMessage').val();
-                        let file = $('#urlfile').val();
-                        let mimetype = $('#mimefile').val();
-                        $('.loader-full').hide();
-                        myDropzone.removeAllFiles(true);
-                        $('#urlfile').val('');
-                        $('#mimefile').val('');
-                        $("#uploads_files").addClass("d-none");
-                        $('#sendNewMessage').val('');
-                        $.post("{{route('crm.whatsapp')}}", {
-                            action:"sendFile",
-                            _token,
+                    $('#sendNewMessage').on("keypress",function(e) {
+                        if (e.keyCode === 13 && e.shiftKey) {
+                            return;
+                        }
+                        if (e.which == 13 && $('#urlfile').val().length > 0) {
+                            e.preventDefault();
+                            $('.loader-full').show();
+                            let mensaje = $('#sendNewMessage').val();
+                            let file = $('#urlfile').val();
+                            let mimetype = $('#mimefile').val();
+                            $('.loader-full').hide();
+                            myDropzone.removeAllFiles(true);
+                            $('#urlfile').val('');
+                            $('#mimefile').val('');
+                            $("#uploads_files").addClass("d-none");
+                            $('#sendNewMessage').val('');
+                            $.post("https://vive.com.co:8443/what/cartera", {
+                                action:"sendFile",
+                                _token,
+                                "id": $('.person.active-user').data('id'),
+                                "file": file,
+                                "mime": mimetype,
+                                "mensaje": mensaje,
+                                "tecnico": "{{$user = Auth::user()->id}}",
+                                "name": "{{$user = Auth::user()->name}}"
+                            }).done(function(data) {
+                                if(typeof data == "string"){
+                                    data = JSON.parse(data);
+                                }
+                                if(data.salida == "error"){
+                                    swal({
+                                        title: data.message,
+                                        type: data.salida,
+                                        showCancelButton: false,
+                                        showConfirmButton: true,
+                                        cancelButtonColor: '#00ce68',
+                                        cancelButtonText: 'Aceptar',
+                                    })
+                                }
+    
+                                $('.users li[data-id="' + data.from + '"]').attr('data-time', data.timestamp).attr('data-estado', "0").prependTo(".users");
+                                $('.users li[data-id="' + data.from + '"] .lastmessage').html("<b>Tú: </b>"+data.body);
+                                contermischats();
+                                actulizartime();
+                            });
+                            return;
+                        }
+                        if (e.which == 13 && $(this).val().length > 0) {
+                            e.preventDefault();
+                            $('#urlfile').val('');
+                            $('#mimefile').val('');
+                            let mensaje =  $(this).val();
+                            $(this).val('');
+                            $.post("https://vive.com.co:8443/what/cartera", {
+                                _token,
+                                action:"sendMessage",
+                                id: $('.person.active-user').data('id'),
+                                "tecnico": "{{$user = Auth::user()->id}}",
+                                message:mensaje,
+                                tipo: 'texto'
+                            }).done(function(data) {
+                                if(typeof data == "string"){
+                                    data = JSON.parse(data);
+                                }
+                                $('.users li[data-id="' + data.from + '"]').attr('data-time', data.timestamp).attr('data-estado', "0").prependTo(".users");
+                                $('.users li[data-id="' + data.from + '"] .lastmessage').html("<b>Tú: </b>"+data.body);
+                                if(data.salida != "success"){
+                                    swal({
+                                        title: data.message,
+                                        type: data.salida,
+                                        showCancelButton: false,
+                                        showConfirmButton: true,
+                                        cancelButtonColor: '#00ce68',
+                                        cancelButtonText: 'Aceptar',
+                                    }).then((result) => {
+                                        if(data.salida == "success"){
+                                            location.reload();
+                                        }
+                                    });
+                                }
+                                contermischats();
+                                actulizartime();
+                            });
+                           
+                            return;
+                        }
+                    
+                        socketSerVER.emit("typing", {
                             "id": $('.person.active-user').data('id'),
-                            "file": file,
-                            "mime": mimetype,
-                            "mensaje": mensaje,
                             "tecnico": "{{$user = Auth::user()->id}}",
                             "name": "{{$user = Auth::user()->name}}"
-                        }).done(function(data) {
-                            if(typeof data == "string"){
-                                data = JSON.parse(data);
-                            }
-                            if(data.salida == "error"){
-                                swal({
-                                    title: data.message,
-                                    type: data.salida,
-                                    showCancelButton: false,
-                                    showConfirmButton: true,
-                                    cancelButtonColor: '#00ce68',
-                                    cancelButtonText: 'Aceptar',
-                                })
-                            }
-
-                            $('.users li[data-id="' + data.from + '"]').attr('data-time', data.timestamp).attr('data-estado', "0").prependTo(".users");
-                            $('.users li[data-id="' + data.from + '"] .lastmessage').html("<b>Tú: </b>"+data.body);
-                            contermischats();
-                            actulizartime();
                         });
-                        return;
-                    }
-                    if (e.which == 13 && $(this).val().length > 0) {
-                        e.preventDefault();
-                        $('#urlfile').val('');
-                        $('#mimefile').val('');
-                        let mensaje =  $(this).val();
-                        $(this).val('');
-                        $.post("{{route('crm.whatsapp')}}", {
-                            _token,
-                            action:"sendMessage",
-                            id: $('.person.active-user').data('id'),
-                            "tecnico": "{{$user = Auth::user()->id}}",
-                            message:mensaje,
-                            tipo: 'texto'
-                        }).done(function(data) {
-                            if(typeof data == "string"){
-                                data = JSON.parse(data);
-                            }
-                            $('.users li[data-id="' + data.from + '"]').attr('data-time', data.timestamp).attr('data-estado', "0").prependTo(".users");
-                            $('.users li[data-id="' + data.from + '"] .lastmessage').html("<b>Tú: </b>"+data.body);
-                            if(data.salida != "success"){
-                                swal({
-                                    title: data.message,
-                                    type: data.salida,
-                                    showCancelButton: false,
-                                    showConfirmButton: true,
-                                    cancelButtonColor: '#00ce68',
-                                    cancelButtonText: 'Aceptar',
-                                }).then((result) => {
-                                    if(data.salida == "success"){
-                                        location.reload();
-                                    }
-                                });
-                            }
-                            contermischats();
-                            actulizartime();
-                        });
-                       
-                        return;
-                    }
-                
-                    socketSerVER.emit("typing", {
-                        "id": $('.person.active-user').data('id'),
-                        "tecnico": "{{$user = Auth::user()->id}}",
-                        "name": "{{$user = Auth::user()->name}}"
                     });
-                });
+                
+                
                 socketSerVER.io.on("error", (error) => {
                     console.log("ERROR");
                 });
@@ -2153,27 +2600,57 @@
                     $("span." + data.id.id).removeClass('check-w-2');
                     $("span." + data.id.id).addClass('check-w-3');
                 });
+
                 $(document).on("click", ".itemoperador", function() {
                     $('.listaoperadores .itemoperador.active').removeClass('active');
                     $('.listaoperadores a[data-asignado="' + $(this).data('asignado') + '"]').addClass('active');
-                    $.post("{{route('crm.whatsapp')}}", {
+                    
+                    $.post("https://vive.com.co:8443/what/cartera", {
                         id: $('.person.active-user').data('id'),
                         action:"changeTecnico",
                         _token,
                         tecnico: $(this).data('asignado')
                     });
+
+
+
+
                     socketSerVER.emit('changeoperador', {
                         tecnico: $(this).data('asignado'),
                         id: $('.person.active-user').data('id'),
                         name: $(this).text(),
                         cliente: $('li.person.active-user .name').text()
                     });
+
+
+                    $('.listaoperadores .itemoperador.active').removeClass('active');
+                    $('.users-container .person').removeClass('active-user');
+                    $('.chat-container').hide();
+                    $('.users-container').show();
+                    $('.chatback').hide();
+
+                    let info = localStorage.getItem("info");
+                    if(info == null){
+                        info = {
+                            frame:false,
+                            activeChat:0,
+                            size:false
+                        };
+                        localStorage.setItem("info",JSON.stringify(info));
+                    }else{
+                        info = JSON.parse(info);
+                    }
+                    info.activeChat = 0;
+                    localStorage.setItem("info",JSON.stringify(info));
                 });
+
                 socketSerVER.on('typing', function(data) {
                     if (data.changename) {
                         $('li.person[data-id="' + data.id + '"] .name').text(data.nombre);
+                        $('.headerchat.selected-user .name').text(data.nombre);
                         return;
                     }
+
                     $('#showtyping,li.person[data-id="' + data.id + '"] .typing').css('display', 'none');
                     if (data.type == "record") {
                         $('li.person[data-id="' + data.id + '"] .nametyping').text(data.name);
@@ -2205,6 +2682,7 @@
                     if(datos.to.includes("@g.us")){
                         return;
                     }
+
                     if (!$('.users li[data-id="' + datos.to + '"]').length) {
                         if(!datos?.picurl){
                             datos.picurl = "https://ramenparados.com/wp-content/uploads/2019/03/no-avatar-png-8.png";
@@ -2224,7 +2702,7 @@
                                     <span class="name"> ` + nombre + `
                                     </span>` + ` 
                                     <span class="lastmessage"><b>Tú: </b>` + datos.body + `</span>`+`
-                                    <span class="operadorasignado"> No asignado </span>` + `
+                                    <span class="operadorasignado"> Sin asignado </span>` + `
                                     <span class="time">hace un momento </span>` + ` 
                                 </p>` + ` 
                                 <span class ="conter-chat-user"> 1 </span>
@@ -2448,7 +2926,7 @@
                                     <span class="name"> ` + nombre + `
                                     </span>` + ` 
                                     <span class="lastmessage">` + datos.body + `</span>`+`
-                                    <span class="operadorasignado"> No asignado </span>` + `
+                                    <span class="operadorasignado"> Sin asignado </span>` + `
                                     <span class="time">hace un momento </span>` + ` 
                                 </p>` + ` 
                                 <span class ="conter-chat-user"> 1 </span>
@@ -2456,6 +2934,10 @@
                         $('.users').prepend(newcontacto);
                         actulizartime();
                     }
+                    if($('.users li[data-id="' + datos.from + '"]').attr("data-tecnico") == {{Auth::user()->id}} || $('.users li[data-id="' + datos.from + '"]').attr("data-tecnico") == 0){
+                        $('.users li[data-id="' + datos.from + '"]').removeClass('d-none');
+                    }
+                    
                     //$('.users li[data-id="'+datos.to+'"]').attr('data-time',datos.timestamp).attr('data-estado',"0").prependTo(".users");
                     $('.users li[data-id="' + datos.from + '"]').attr('data-time', datos.timestamp).attr('data-estado', "0").prependTo(".users");
                     if (datos.type == 'chat') {
@@ -2651,27 +3133,44 @@
                 });
                 socketSerVER.on('changeoperador', function(data) {
                     $('.users li[data-id="' + data.id + '"]').attr('data-tecnico', data.tecnico);
+                    if((data.tecnico != '{{Auth::user()->id}}') ){
+                        $('li[data-id="' + data.id + '"] #alertaChat').addClass('d-none');
+                    }else{
+                        $('li[data-id="' + data.id + '"] #alertaChat').removeClass('d-none');
+                    }                    
+
+                    if((data.tecnico != '{{Auth::user()->id}}') && "{{Auth::user()->id}}" != "1" && data.tecnico != 0 ){
+                        $('.users li[data-id="' + data.id + '"]').addClass("d-none");
+                    }else{
+                        $('.users li[data-id="' + data.id + '"]').removeClass("d-none");
+                    }
                     if (data.tecnico > 0) {
                         if ($('.active-user[data-id="' + data.id + '"]').length) {
                             $('.messageasigned').show();
+                            $('.nameoperador').text(data.name);
                         }
                         
-                        $('.nameoperador').text(data.name);
                         $('.person[data-id="' + data.id + '"] .operadorasignado').text('Asignado a ' + data.name);
                     } else {
                         if ($('.active-user[data-id="' + data.id + '"]').length) {
+                            $('.nameoperador').text(data.name);
                             $('.messageasigned').hide();
                         }
-                        $('.nameoperador').text(data.name);
-                        $('.person[data-id="' + data.id + '"] .operadorasignado').text('Asignado a ' + data.name);
+                        $('.person[data-id="' + data.id + '"] .operadorasignado').text(data.name);
                     }
                     setTimeout(() => {
                     contermischats();
                     }, 300);
                 });
                 socketSerVER.on('closechat', function(id) {
+                    console.log(id);
+                    $('.users li[data-id="' + id + '"] .conter-chat-user').text("");
                     $('.users li[data-id="' + id + '"]').attr("data-estado", "1");
+                    $('.users li[data-id="' + id + '"]').attr("data-tecnico", "0");
                     $('.users li[data-id="' + id + '"]').appendTo('.users');
+                    if({{Auth::user()->id}} != "1"){
+                        $('.users li[data-id="' + id + '"]').addClass("d-none");
+                    }
                     $('.closechatw.ti-close.m-l-10').hide();
                     contermischats();
                     actulizartime();
@@ -2682,17 +3181,20 @@
             })
         @endif
     @endif
+        
+
+
     addAutomaticIP();
     var _token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     function reloadButton(){
         $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Reiniciando la instancia, por favor espere.</div>");
         try{
-            $.post("{{route('crm.whatsapp')}}",{action:"reloadInstancia",_token})
+            $.post("https://vive.com.co:8443/what/cartera",{action:"reloadInstancia",_token})
             .then((data)=>{
                 if(typeof data == "string"){
                     data = JSON.parse(data);
                 }
-                $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                 swal({
                         title: data.message,
                         type: data.salida,
@@ -2708,7 +3210,7 @@
                 }
             })
         }catch(err){
-            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
             swal({
                     title: "Ocurrio un error reiniciando la instancia, comunicate con tu proveedor.",
                     type: "error",
@@ -2723,13 +3225,13 @@
         var addr = $("#ipAddr").val();
         $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Creando la instancia, por favor espere.</div>");
         try{
-            $.post("{{route('crm.whatsapp')}}",{action:"create",_token,addr})
+            $.post("https://vive.com.co:8443/what/cartera",{action:"create",_token,addr})
             .then((data)=>{
                 
                 if(typeof data == "string"){
                     data = JSON.parse(data);
                 }
-                $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                 swal({
                         title: data.message,
                         type: data.salida,
@@ -2743,7 +3245,7 @@
                 }
             })
         }catch(err){
-            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+            $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
             swal({
                     title: "Ocurrio un error creando la instancia, comunicate con tu proveedor.",
                     type: "error",
@@ -2760,19 +3262,21 @@
         if(type == "imagen" || type == "video" ){
             try {
                 $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Cargando multimedia, por favor espere.</div>");
-                $.post("{{route('crm.whatsapp')}}",{action:"getMedia",id,_token,mimetype})
+                $.post("https://vive.com.co:8443/what/cartera",{action:"getMedia",id,_token,mimetype})
                 .then((data)=>{
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     if(typeof data == "string"){
                         data = JSON.parse(data);
                     }
                     if(data.salida == "success"){
                         let imagen;
                         if(type == "imagen"){
-                            imagen = `<img src="${data.src}" class="img-fluid" alt="Imagen Modal">`;
+                            let file_data = data.src.split(";")[0];
+                            let file_extension = file_data.split("/")[1];
+                            imagen = `<a target="_blank"><img src="${data.src}" class="img-fluid" alt="Imagen Modal"></a>`;
                         }else{
                             imagen = `
-                            <video width="auto" height="240" controls="" style="border-radius: 10px;max-width: 100%;" preload="none">
+                            <video width="auto" height="auto" controls="" style="border-radius: 10px;max-width: 100%;" preload="none">
                             <source src="${data.src}" type="video/mp4">
                             </video>`;
                         }
@@ -2826,9 +3330,9 @@
         if(type == "audio"){
             try {
                 $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Cargando multimedia, por favor espere.</div>");
-                $.post("{{route('crm.whatsapp')}}",{action:"getMedia",id,_token,mimetype})
+                $.post("https://vive.com.co:8443/what/cartera",{action:"getMedia",id,_token,mimetype})
                 .then((data)=>{
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     if(typeof data == "string"){
                         data = JSON.parse(data);
                     }
@@ -2885,9 +3389,9 @@
         if(type == "document"){
             try {
                 $("#contenedor_carga").css("visibility","visible").css("opacity","1").prepend("<div style=\"text-align: center;margin-top: 50px;font-size: larger;font-weight: 900;\">Cargando multimedia, por favor espere.</div>");
-                $.post("{{route('crm.whatsapp')}}",{action:"getMedia",id,_token,mimetype})
+                $.post("https://vive.com.co:8443/what/cartera",{action:"getMedia",id,_token,mimetype})
                 .then((data)=>{
-                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="{{asset('images/gif-tuerca.gif')}}">`);
+                    $("#contenedor_carga").css("visibility","hidden").css("opacity","0").html(`<img id="carga" src="https://vive.com.co:8443/what/images/gif-tuerca.gif">`);
                     if(typeof data == "string"){
                         data = JSON.parse(data);
                     }
